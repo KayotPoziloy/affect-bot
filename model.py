@@ -13,17 +13,15 @@ classifier = pipeline(
     device=0 if torch.cuda.is_available() else -1
 )
 
-text = "Ты сволоч"
 
-start_time = time.time()
+def predict(text):
+    result = classifier(text)[0]
+    label = result["label"]
+    score = result["score"]
 
-result = classifier(text)[0]
+    print(f"Тон: {label}, вероятность: {score:.2f}")
 
-end_time = time.time()
 
-label = result["label"]
-score = result["score"]
-elapsed_time = end_time - start_time
-
-print(f"Тон: {label}, вероятность: {score:.2f}")
-print(f"Время ответа: {elapsed_time:.4f} секунд")
+while True:
+    text = input("Введите текст: ")
+    predict(text)
