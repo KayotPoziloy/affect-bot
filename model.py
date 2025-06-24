@@ -1,5 +1,4 @@
 import torch
-import time
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
 
 model_name = "cointegrated/rubert-tiny-toxicity"
@@ -21,7 +20,5 @@ def predict(text):
 
     print(f"Тон: {label}, вероятность: {score:.2f}")
 
+    return label, score
 
-while True:
-    text = input("Введите текст: ")
-    predict(text)
