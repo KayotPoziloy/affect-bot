@@ -6,10 +6,11 @@ from tempfile import NamedTemporaryFile
 from keras.models import load_model
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
-from model import predict
+
+from models.text_model import predict
 
 BOT_TOKEN = "***"
-AUDIO_MODEL_PATH = 'audio_sentiment_model.h5'
+AUDIO_MODEL_PATH = '../models/audio_sentiment_model.h5'
 
 SAMPLE_RATE = 22050
 DURATION = 4
@@ -17,6 +18,7 @@ N_MFCC = 13
 MAX_PAD_LEN = 174
 
 audio_model = load_model(AUDIO_MODEL_PATH)
+
 
 def preprocess_audio_bytes(audio_bytes):
     with NamedTemporaryFile(delete=False, suffix=".ogg") as temp:
@@ -41,7 +43,6 @@ def preprocess_audio_bytes(audio_bytes):
             print(f"Ошибка удаления временного файла: {e}")
 
 
-
 def predict_audio_sentiment(audio_bytes):
     processed = preprocess_audio_bytes(audio_bytes)
     if processed is None:
@@ -52,6 +53,7 @@ def predict_audio_sentiment(audio_bytes):
         return f"⚠️ Обнаружено негативное аудиосообщение\nВероятность негативности: {negative_prob:.2f}"
     else:
         return f"✅ Аудио не содержит негативного контента (вероятность: {1 - negative_prob:.2f})"
+
 
 async def check_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     message = update.effective_message
@@ -69,6 +71,7 @@ async def check_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"❗ Пожалуйста, соблюдайте нормы общения."
         )
         await message.reply_text(response)
+
 
 async def check_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     voice = update.message.voice or update.message.audio
