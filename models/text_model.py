@@ -21,4 +21,3 @@ def predict(text):
     print(f"Тон: {label}, вероятность: {score:.2f}")
 
     return label, score
-
