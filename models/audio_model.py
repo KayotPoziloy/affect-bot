@@ -46,6 +46,6 @@ def predict_audio_sentiment(audio_bytes: bytes):
     prediction = audio_model.predict(processed)
     negative_prob = prediction[0][1]
     if negative_prob > 0.5:
-        return f"⚠️ Обнаружено негативное аудиосообщение\nВероятность негативности: {negative_prob:.2f}"
+        return f"⚠️ Обнаружено негативное аудиосообщение\nВероятность негативности: {negative_prob:.2f}", negative_prob
     else:
         return f"✅ Аудио не содержит негативного контента (вероятность: {1 - negative_prob:.2f})"
